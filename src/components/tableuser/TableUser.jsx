@@ -2,8 +2,9 @@ import './Paginate.css'
 import { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
-import getAllUser from '../../api/userapi/UserApi';
+import {getAllUser} from '../../api/userapi/UserApi';
 import ReactPaginate from 'react-paginate';
+import AddUser from './addnew/AddUser';
 
 function TableUsers() {
     const [listUser , setListUser] = useState([]);
@@ -22,8 +23,17 @@ function TableUsers() {
     const handlePageClick = (event) => {
         getUsers(+event.selected + 1)
     }
+    const handleUpdeteTable = (user) => {
+        setListUser([user,...listUser]);
+    }
   return (
     <Container >
+        <div className='d-flex justify-content-between my-3'>
+           <div className="">
+            List user
+           </div>
+           <AddUser handleUpdeteTable={handleUpdeteTable} />
+        </div>
         <Table striped bordered hover>
             <thead>
                 <tr>
@@ -31,7 +41,7 @@ function TableUsers() {
                 <th>Email</th>
                 <th>First Name</th>
                 <th>Last name</th>
-                {/* <th> avatar</th> */}
+                <th> Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,7 +53,12 @@ function TableUsers() {
                                 <td>{user.email}</td>
                                 <td>{user.first_name}</td>
                                 <td>{user.last_name}</td>
-                                {/* <td center><img src={user.avatar} alt="image" /></td> */}
+                                <td>
+                                    <div>
+                                        <AddUser isEdit user={user}/>
+                                        <button type='button' className='btn btn-danger '>Delete</button>
+                                    </div>
+                                </td>
                             </tr>
                         )
                     })
